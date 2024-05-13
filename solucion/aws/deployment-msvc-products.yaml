@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msvc-products
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msvc-products
+  template:
+    metadata:
+      labels:
+        app: msvc-products
+    spec:
+      containers:
+        - name: products
+          image: mfernandez4060/finconecta-msvc-products:v1
+          ports:
+            - containerPort: 8002
+          env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: msvc-products
+                key: port
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: msvc-products
+                key: db_host
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: msvc-products
+                key: database
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: msvc-products
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: msvc-products
+                key: password
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "400m"
+            limits:
+              memory: "800Mi"
+              cpu: "500m"

@@ -1,5 +1,19 @@
 version: "3.9"
 services:
+  postgres14:
+    container_name: postgres14
+    image: postgres:14-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: msvc
+      POSTGRES_DB: msvc_products      
+    volumes:
+      - data-postgres:/var/lib/postgresql/data
+    networks:
+      - spring
+
   mongodatabase:
     container_name: mongodatabase
     image: mongo:5
@@ -7,13 +21,50 @@ services:
     ports:
       - 27017:27017
     environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: users4060
       MONGODB_DATABASE: users
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - ./mongo:/data/db
+      - ./mongo:/data/db   
+    command: mongod
     networks:
       - spring      
+      
+  msvc-users:
+    container_name: msvc-users
+    build: 
+      context: ./
+      dockerfile: ./msvc.users/Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      PORT: 8001
+      MONGO_CONNECTION: mongodb://user:users4060@mongodatabase:27017/admin      
+      DB_DATABASE: msvc_users
+    networks:
+      - spring
+    depends_on:
+      - mongodatabase
+    restart: always
+
+  msvc-products:
+    container_name: msvc-products
+    build: 
+      context: ./
+      dockerfile: ./msvc.products/Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      PORT: 8002
+      DB_HOST: postgres14:5432
+      DB_DATABASE: msvc_products
+      DB_USERNAME: postgres
+      DB_PASSWORD: msvc
+    networks:
+      - spring
+    depends_on:
+      - postgres14
+    restart: always
     
 volumes:
   data-postgres:

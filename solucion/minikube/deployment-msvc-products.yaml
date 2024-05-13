@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: products
-          image: mfernandez4060/finconecta-msvc-products:latest
+          image: mfernandez4060/finconecta-msvc-products:v1
           ports:
             - containerPort: 8002
           env:
@@ -42,4 +42,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: msvc-products
-                key: password           
+                key: password
+      resources:
+        requests:
+          memory: "512Mi"
+          cpu: "400m"
+          limits:
+          memory: "800Mi"
+          cpu: "500m"

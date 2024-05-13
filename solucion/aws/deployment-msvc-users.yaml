@@ -18,7 +18,7 @@ spec:
         app: msvc-users
     spec:
       containers:
-      - image: mfernandez4060/finconecta-msvc-users:latest
+      - image: mfernandez4060/finconecta-msvc-users:v1
         name: finconecta-msvc-users
         ports:
         - containerPort: 8001
@@ -38,3 +38,10 @@ spec:
               configMapKeyRef:
                 name: msvc-users
                 key: database
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "400m"
+          limits:
+            memory: "800Mi"
+            cpu: "500m"

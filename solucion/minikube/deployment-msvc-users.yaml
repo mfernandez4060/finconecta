@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: msvc-users
+  name: msvc-users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msvc-users
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: msvc-users
+    spec:
+      containers:
+      - image: mfernandez4060/finconecta-msvc-users:v1
+        name: finconecta-msvc-users
+        ports:
+        - containerPort: 8001
+        env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: msvc-users
+                key: port
+          - name: MONGO_CONNECTION
+            valueFrom:
+              secretKeyRef:
+                name: msvc-users
+                key: mongo_connection
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: msvc-users
+                key: database
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "400m"
+          limits:
+            memory: "800Mi"
+            cpu: "500m"

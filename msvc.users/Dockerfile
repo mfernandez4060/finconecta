@@ -20,6 +20,8 @@ RUN mkdir ./logs
 
 COPY --from=builder /app/msvc.users/target/msvc.users-0.0.1-SNAPSHOT.jar .
 
-EXPOSE 8002
+ARG PORT_APP=8001
+ENV PORT $PORT_APP
+EXPOSE $PORT
 
 CMD [ "java", "-jar", "./msvc.users-0.0.1-SNAPSHOT.jar" ]
