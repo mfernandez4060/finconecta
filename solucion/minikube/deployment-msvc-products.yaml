@@ -43,10 +43,3 @@ spec:
               secretKeyRef:
                 name: msvc-products
                 key: password
-      resources:
-        requests:
-          memory: "512Mi"
-          cpu: "400m"
-          limits:
-          memory: "800Mi"
-          cpu: "500m"

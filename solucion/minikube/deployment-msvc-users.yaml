@@ -38,10 +38,3 @@ spec:
               configMapKeyRef:
                 name: msvc-users
                 key: database
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "400m"
-          limits:
-            memory: "800Mi"
-            cpu: "500m"
